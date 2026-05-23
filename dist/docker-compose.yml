@@ -1,0 +1,9 @@
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./download:/app/download
+      - ./music:/app/music
+    restart: always
