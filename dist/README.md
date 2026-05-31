@@ -1,5 +1,5 @@
 # Flask YouTube → MP3 Downloader — Instalación
-# by TUP4C :: LRDBz
+# by TUP4C
 
 ## Linux
 1. **Instalar Docker**

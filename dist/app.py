@@ -6,6 +6,7 @@ _C='DELETE'
 _B='GET'
 _A='error'
 import os,json
+from urllib.parse import quote
 from flask import Flask,request,jsonify,render_template,send_from_directory,Response,stream_with_context
 from module.downloader import download_audio
 from module.config import load_config
@@ -40,7 +41,7 @@ def list_songs():
 	try:
 		B=[]
 		for A in os.listdir(MUSIC_FOLDER):
-			if A.endswith('.mp3'):D=os.path.join(MUSIC_FOLDER,A);B.append({'name':A,'url':'/audio/'+A,C:os.path.getmtime(D)})
+			if A.endswith('.mp3'):D=os.path.join(MUSIC_FOLDER,A);B.append({'name':A,'url':'/audio/'+quote(A,safe=''),C:os.path.getmtime(D)})
 		B.sort(key=lambda s:s[C],reverse=True);return jsonify(B)
 	except FileNotFoundError:return jsonify([])
 @app.route('/audio/<filename>',methods=[_B,_C])

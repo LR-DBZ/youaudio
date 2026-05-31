@@ -1,11 +1,11 @@
-import os,queue,threading,pytubefix
+import os,re,queue,threading,pytubefix
 from module.config import load_and_validate_paths
 from module.stream import obtain_itag
 from module.converter import convert_m4a_to_mp3,move_file
 def _process_first_m4a(source_dir,dest_dir):
 	C=dest_dir;A=source_dir
 	for B in os.listdir(A):
-		if B.endswith('.m4a'):D=os.path.join(A,B);F=convert_m4a_to_mp3(D,A);E=os.path.splitext(B)[0]+'.mp3';G=os.path.join(C,E);move_file(F,G);os.remove(D);return f"Downloaded {E} on Folder: {C}"
+		if B.endswith('.m4a'):D=os.path.join(A,B);F=convert_m4a_to_mp3(D,A);G=re.sub('[?&#/:*?"<>|]','_',os.path.splitext(B)[0]);E=G+'.mp3';H=os.path.join(C,E);move_file(F,H);os.remove(D);return f"Downloaded {E} on Folder: {C}"
 	raise FileNotFoundError(f"No .m4a files found in {A}")
 def download_audio(link):
 	L='downloading';G=None;C='msg';B='pct';A='step';H,M=load_and_validate_paths();D=queue.Queue();F=[]
