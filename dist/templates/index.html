@@ -1,65 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="author" content="TUP4C" />
+		<link rel="icon" type="image/webp" href="/static/images/avatar.webp" />
+		<title>You Audio</title>
+		<link rel="stylesheet" href="/static/styles.min.css" />
+		<script type="module" src="/static/youAudio.min.js"></script>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="TUP4C">
-    <link rel="icon" type="image/webp" href="/static/images/avatar.webp">
-    <title>You Audio</title>
-    <link rel="stylesheet" href="/static/styles.min.css">
-    <script src="/static/youAudio.min.js" defer></script>
-</head>
+	<body>
+		<div class="card">
+			<h1>YouAudio Downloader - MP3</h1>
+			<form id="download-form" novalidate>
+				<label for="youtube-link" class="sr-only">YouTube link</label>
+				<input
+					type="text"
+					id="youtube-link"
+					placeholder="Paste a YouTube link here"
+					required
+				/>
+				<div class="button-row">
+					<button type="submit" id="download-btn">Download</button>
+					<button type="button" id="cancel-btn" class="hidden">Cancel</button>
+				</div>
+			</form>
+			<div id="status" class="status"></div>
 
-<body>
-    <div class="card">
-        <h1>YouTube Audio Downloader - MP3</h1>
-        <form id="download-form" novalidate>
-            <label for="youtube-link" class="sr-only">YouTube link</label>
-            <input type="text" id="youtube-link" placeholder="Paste a YouTube link here" required>
-            <div class="button-row">
-                <button type="submit" id="download-btn">Download</button>
-                <button type="button" id="cancel-btn" class="hidden">Cancel</button>
-            </div>
-        </form>
-        <div id="status" class="status"></div>
+			<div id="progress-container" class="progress-container hidden">
+				<div class="progress-header">
+					<span id="progress-msg"></span>
+					<span id="progress-pct">0%</span>
+				</div>
+				<progress id="progress-bar" value="0" max="100"></progress>
+			</div>
 
-        <div id="progress-container" class="progress-container hidden">
-            <div class="progress-header">
-                <span id="progress-msg"></span>
-                <span id="progress-pct">0%</span>
-            </div>
-            <progress id="progress-bar" value="0" max="100"></progress>
-        </div>
+			<hr class="divider" />
 
-        <hr class="divider">
+			<div id="playlist-section">
+				<h2>Downloaded Songs</h2>
+				<ul id="song-list"></ul>
+				<div id="player-bar">
+					<span id="now-playing"></span>
+					<div id="player-controls">
+						<button id="prev-btn" title="Previous">&#x23EE;</button>
+						<button id="play-btn" title="Play/Pause">&#x25B6;</button>
+						<button id="next-btn" title="Next">&#x23ED;</button>
+						<input
+							type="range"
+							id="progress"
+							value="0"
+							min="0"
+							max="100"
+							step="0.1"
+						/>
+						<span id="time-display">0:00 / 0:00</span>
+						<input
+							type="range"
+							id="volume"
+							min="0"
+							max="1"
+							step="0.05"
+							value="1"
+							title="Volume"
+						/>
+						<button id="mode-btn" title="repeat">🔁</button>
+					</div>
+				</div>
+			</div>
 
-        <div id="playlist-section">
-            <h2>Downloaded Songs</h2>
-            <ul id="song-list"></ul>
-            <div id="player-bar">
-                <span id="now-playing"></span>
-                <div id="player-controls">
-                    <button id="prev-btn" title="Previous">&#x23EE;</button>
-                    <button id="play-btn" title="Play/Pause">&#x25B6;</button>
-                    <button id="next-btn" title="Next">&#x23ED;</button>
-                    <input type="range" id="progress" value="0" min="0" max="100" step="0.1">
-                    <span id="time-display">0:00 / 0:00</span>
-                    <input type="range" id="volume" min="0" max="1" step="0.05" value="1" title="Volume">
-                </div>
-            </div>
-        </div>
-
-        <div id="confirm-dialog" class="modal-overlay hidden">
-            <div class="modal">
-                <p id="confirm-msg"></p>
-                <div class="modal-actions">
-                    <button id="confirm-yes" class="btn-danger">Yes, delete</button>
-                    <button id="confirm-no" class="btn-secondary">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-
+			<div id="confirm-dialog" class="modal-overlay hidden">
+				<div class="modal">
+					<p id="confirm-msg"></p>
+					<div class="modal-actions">
+						<button id="confirm-yes" class="btn-danger">Yes, delete</button>
+						<button id="confirm-no" class="btn-secondary">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

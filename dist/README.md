@@ -1,4 +1,4 @@
-# Flask YouTube → MP3 Downloader — Instalación
+# YouAudio → MP3 Downloader — Instalación
 # by TUP4C
 
 ## Linux
@@ -25,6 +25,42 @@
      - "5001:5000"   # 5001 es el puerto anfitrión, cambia a gusto
    ```
    Luego acceder a `http://localhost:5001`
+
+## youaudio CLI — actualización y mantenimiento
+
+youaudio incluye un comando de terminal para facilitar la instalación,
+actualización y mantenimiento del proyecto.
+
+### Instalar el comando
+
+```sh
+cd dist
+./youaudio install
+```
+
+Esto crea un enlace simbólico en `/usr/local/bin/youaudio`.
+Ahora puedes ejecutar `youaudio` desde cualquier directorio.
+
+### Actualizar a la última versión
+
+```sh
+youaudio update                          # actualizar proyecto actual (raíz)
+youaudio update ~/ruta/del/proyecto      # actualizar proyecto específico
+```
+
+El comando descarga la última versión desde GitHub, reemplaza los archivos
+de `dist/`, preserva la configuración local y las canciones descargadas,
+y reinicia el contenedor Docker automáticamente.
+
+**Nota:** ejecutar `youaudio update` apuntando a la raíz del proyecto (donde
+está `dist/docker-compose.yml`), no dentro de `dist/` — el script necesita
+ver la estructura completa del proyecto para funcionar correctamente.
+
+### Desinstalar el comando
+
+```sh
+sudo rm /usr/local/bin/youaudio
+```
 
 ## Windows
 ### Opción A: WSL v2 + Docker (recomendado)

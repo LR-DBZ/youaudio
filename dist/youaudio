@@ -1,0 +1,90 @@
+#!/bin/bash
+# youaudio — CLI tool for youAudio (YouTube → MP3 downloader)
+# Usage: youaudio <command> [options]
+#
+# Commands:
+#   update [dir]   Update youAudio in the given directory (default: .)
+#   install        Install this command system-wide (/usr/local/bin/youaudio)
+#   uninstall      Remove this command from /usr/local/bin
+#   version        Show installed version
+#   help           Show this help message
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+
+case "${1:-}" in
+  update|-update)
+    shift 2>/dev/null || true
+    if [ ! -f "$SCRIPT_DIR/update.sh" ]; then
+      echo "youaudio: update.sh not found at $SCRIPT_DIR/update.sh" >&2
+      exit 1
+    fi
+    source "$SCRIPT_DIR/update.sh"
+    youaudio_update "$@"
+    ;;
+  install|-install)
+    if [ ! -f "$SCRIPT_DIR/youaudio" ]; then
+      echo "youaudio: script not found at $SCRIPT_DIR/youaudio" >&2
+      exit 1
+    fi
+    TARGET_LINK="/usr/local/bin/youaudio"
+    if [ -e "$TARGET_LINK" ] || [ -L "$TARGET_LINK" ]; then
+      echo "youaudio: $TARGET_LINK already exists"
+      echo -n "Overwrite? (y/N) "
+      read -r CONFIRM
+      if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+        echo "Cancelled."
+        exit 0
+      fi
+      sudo rm -f "$TARGET_LINK"
+    fi
+    sudo ln -s "$SCRIPT_DIR/youaudio" "$TARGET_LINK"
+    echo "youaudio: installed at $TARGET_LINK"
+    echo "  You can now run 'youaudio update' from any project directory."
+    ;;
+  uninstall|-uninstall)
+    TARGET_LINK="/usr/local/bin/youaudio"
+    if [ ! -e "$TARGET_LINK" ] && [ ! -L "$TARGET_LINK" ]; then
+      echo "youaudio: not installed at $TARGET_LINK"
+      exit 0
+    fi
+    echo -n "Remove $TARGET_LINK? (y/N) "
+    read -r CONFIRM
+    if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+      echo "Cancelled."
+      exit 0
+    fi
+    sudo rm -f "$TARGET_LINK"
+    echo "youaudio: uninstalled"
+    ;;
+  version|-version|--version)
+    CONFIG_PATH="$SCRIPT_DIR/dist/module/config.json"
+    if [ -f "$CONFIG_PATH" ]; then
+      grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_PATH" | cut -d'"' -f4
+    else
+      echo "unknown ($CONFIG_PATH not found)" >&2
+      exit 1
+    fi
+    ;;
+  help|-h|--help|"")
+    echo "youaudio — YouTube to MP3 downloader"
+    echo ""
+    echo "Usage:"
+    echo "  youaudio update [directory]   Update youAudio in the given directory"
+    echo "  youaudio install              Install 'youaudio' command system-wide"
+    echo "  youaudio uninstall            Remove 'youaudio' command"
+    echo "  youaudio version              Show installed version"
+    echo "  youaudio help                 Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  youaudio update                     Update project in current directory"
+    echo "  youaudio update ~/server/flask      Update project in specific directory"
+    echo "  youaudio install                    Make 'youaudio' available everywhere"
+    ;;
+  *)
+    echo "youaudio: unknown command '$1'" >&2
+    echo "Run 'youaudio help' for usage." >&2
+    exit 1
+    ;;
+esac
