@@ -84,6 +84,8 @@ youaudio_update() {
     rsync -a --delete \
       --exclude='/download/' \
       --exclude='/music/' \
+      --exclude='/update.sh' \
+      --exclude='/youaudio' \
       "$REPO_DIR/dist/" "$DIST_DIR/"
 
     if [ -f "$TMP_DIR/config.json.bak" ]; then
