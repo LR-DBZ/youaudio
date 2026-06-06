@@ -11,6 +11,8 @@
 
 set -euo pipefail
 
+VERSION="1.0.0"
+
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 
 case "${1:-}" in
@@ -59,13 +61,7 @@ case "${1:-}" in
     echo "youaudio: uninstalled"
     ;;
   version|-version|--version)
-    CONFIG_PATH="$SCRIPT_DIR/dist/module/config.json"
-    if [ -f "$CONFIG_PATH" ]; then
-      grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_PATH" | cut -d'"' -f4
-    else
-      echo "unknown ($CONFIG_PATH not found)" >&2
-      exit 1
-    fi
+    echo "youaudio v$VERSION"
     ;;
   help|-h|--help|"")
     echo "youaudio — YouTube to MP3 downloader"
